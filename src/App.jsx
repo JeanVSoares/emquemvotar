@@ -3,9 +3,11 @@ import AppRoutes from "./routes";
 
 function App() {
   return (
+    <div className="bg-neutral-200">
     <BrowserRouter>
       <AppRoutes />
     </BrowserRouter>
+    </div>
   );
 }
 

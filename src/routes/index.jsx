@@ -7,7 +7,7 @@ export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/" element={<SignIn />} />
-            <Route path="/politico/:id" element={<SignUp />} />
+            <Route path="/register" element={<SignUp />} />
         </Routes>
     )
 }
