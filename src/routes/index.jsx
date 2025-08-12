@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
-import ListaPoliticos from "../pages/PolitcList"; 
+import ListaPoliticos from "../pages/ListaPoliticos";
+
 
 export default function AppRoutes() {
     return (
