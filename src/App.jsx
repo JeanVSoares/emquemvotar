@@ -2,7 +2,6 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes";
 import Footer from "./component/Footer";
 import PixDonation from "./component/PixDonation";
-import Nav from "./component/Nav";
 
 function App() {
   return (
@@ -10,6 +9,7 @@ function App() {
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
+      <Footer/>
     </div>
   );
 }

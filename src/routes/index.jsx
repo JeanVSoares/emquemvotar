@@ -9,10 +9,9 @@ import Home from "../pages/Home";
 export default function AppRoutes() {
     return (
         <div>
-        
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/lista_politico" element={<ListaPoliticos />} />
+                <Route path="/lista_deputado" element={<ListaPoliticos />} />
                 <Route path="/signIn" element={<SignIn />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/deputado/:id" element={<DeputadoDetail />} />
