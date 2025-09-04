@@ -4,15 +4,19 @@ import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import ListaPoliticos from "../pages/ListaPoliticos";
 import DeputadoDetail from "../pages/DeputadoDetail";
-
+import Home from "../pages/Home";
 
 export default function AppRoutes() {
     return (
-        <Routes>
-            <Route path="/" element={<ListaPoliticos />} />
-            <Route path="/signIn" element={<SignIn />} />
-            <Route path="/register" element={<SignUp />} />
-            <Route path="/deputado/:id" element={<DeputadoDetail />} />
-        </Routes>
+        <div>
+        
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/lista_politico" element={<ListaPoliticos />} />
+                <Route path="/signIn" element={<SignIn />} />
+                <Route path="/register" element={<SignUp />} />
+                <Route path="/deputado/:id" element={<DeputadoDetail />} />
+            </Routes>
+        </div>
     )
 }
