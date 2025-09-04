@@ -6,8 +6,9 @@ const BASE_URL = "https://dadosabertos.camara.leg.br/api/v2";
  * @param {number} itens - Quantidade de itens por página
  * @returns {Promise<Object>} - Retorna os dados da API
  */
-export async function getDeputados(pagina = 1, itens = 20) {
-  const url = `${BASE_URL}/deputados?pagina=${pagina}&itens=${itens}&ordem=ASC&ordenarPor=nome`;
+export async function getDeputados(pagina = 1, itens = 20, ordem ="ASC" , ordenarPor="nome") {
+  console.log(`/deputados?pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`)
+  const url = `${BASE_URL}/deputados?pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`;
 
   const resposta = await fetch(url);
   if (!resposta.ok) {
