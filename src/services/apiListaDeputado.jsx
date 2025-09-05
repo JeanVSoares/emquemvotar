@@ -6,9 +6,10 @@ const BASE_URL = "https://dadosabertos.camara.leg.br/api/v2";
  * @param {number} itens - Quantidade de itens por página
  * @returns {Promise<Object>} - Retorna os dados da API
  */
-export async function getDeputados(pagina = 1, itens = 20, ordem ="ASC" , ordenarPor="nome") {
+export async function getDeputados(pagina = 1, itens = 20, ordem = "ASC", ordenarPor = "nome", siglaUf = '') {
   console.log(`/deputados?pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`)
-  const url = `${BASE_URL}/deputados?pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`;
+  console.log(`siglaUf=MG&`)
+  const url = `${BASE_URL}/deputados?${siglaUf === '' ? '' : 'siglaUf=' + siglaUf + '&'}pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`;
 
   const resposta = await fetch(url);
   if (!resposta.ok) {
@@ -40,7 +41,7 @@ export async function getDeputadoDetalhes(id) {
 export async function getDeputadoAll() {
   const url = `${BASE_URL}/deputados`;
   const resposta = await fetch(url);
-  
+
   if (!resposta.ok) {
     throw new Error("Erro ao buscar todos os deputados");
   }

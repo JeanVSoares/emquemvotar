@@ -1,9 +1,11 @@
 import PoliticoCard from "../../component/PoliticoCard";
+import PoliticoList from "../../component/PoliticoList";
 import { useEffect, useState } from "react";
 import Pagination from "../../component/Pagination";
 import Loading from "../../component/Loading";
 import { getDeputados } from "../../services/apiListaDeputado";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { FaGripLines, FaGrip } from 'react-icons/fa6';
 
 const itensOrdemPor = [
   { name: "Nome", query: "nome" },
@@ -182,23 +184,25 @@ const itensUF = [
 export default function ListaPoliticos() {
 
   const [dados, setDados] = useState([]);
+  const [siglaUF, setSiglaUF] = useState('');
   const [loading, setLoading] = useState(true);
   const [pagina, setPagina] = useState(1);
-  const [quantidade, setQuantidade] = useState(10);
+  const [quantidade, setQuantidade] = useState(16);
   const [ordem, setOrdem] = useState('ASC');
   const [ordenarPor, setOrdenarPor] = useState('nome');
+  const [visual, setVisual] = useState(0)
 
 
 
   useEffect(() => {
-    console.log(ordem);
+
+    console.log(visual);
     async function buscar() {
-      setLoading(true);
+
       setDados([]);
       try {
-        const resultado = await getDeputados(pagina, quantidade, ordem, ordenarPor); // página, quantidade
+        const resultado = await getDeputados(pagina, quantidade, ordem, ordenarPor, siglaUF); // página, quantidade
         setDados(resultado.dados);
-
       } catch (erro) {
         console.error(erro.message);
       } finally {
@@ -206,7 +210,7 @@ export default function ListaPoliticos() {
       }
     }
     buscar();
-  }, [pagina, quantidade, ordem, ordenarPor])
+  }, [pagina, quantidade, ordem, ordenarPor, siglaUF, visual])
 
   return (
 
@@ -227,9 +231,9 @@ export default function ListaPoliticos() {
               autoComplete="quantidade-name"
               className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             >
-              <option value={10}>10</option>
-              <option value={30}>30</option>
-              <option value={50}>50</option>
+              <option value={16}>16</option>
+              <option value={24}>24</option>
+              <option value={64}>64</option>
             </select>
             <ChevronDownIcon
               aria-hidden="true"
@@ -237,18 +241,21 @@ export default function ListaPoliticos() {
             />
           </div>
         </div>
-        {/* Estado */}
+        {/* Sigla UF */}
         <div className="sm:col-span-1">
           <label htmlFor="city" className="block text-sm/6 font-medium text-gray-900">
             Estado
           </label>
           <div className="mt-2 grid grid-cols-1">
             <select
-              id="quantidade"
-              name="quantidade"
-              autoComplete="quantidade-name"
+              value={siglaUF}
+              onChange={(e) => setSiglaUF(e.target.value)}
+              id="siglaUF"
+              name="siglaUF"
+              autoComplete="siglaUF-name"
               className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             >
+              <option value=''>-</option>
               {itensUF.map((p, item) => (
                 <option value={p.sigla}>{p.sigla}</option>
               ))}
@@ -308,17 +315,45 @@ export default function ListaPoliticos() {
           </div>
 
         </div>
+        {/*Lista ou Card*/}
+        <div className="sm:col-span-2">
+          <div className="flex flex-row justify-center mt-10">
+            {/*Botão Card*/}
+            <button
+              className={!visual ? "text-base text-stone-950 hover:text-stone-700 cursor-pointer px-2" : "text-base text-stone-400 hover:text-stone-700 cursor-pointer px-2"}
+              onClick={() => setVisual(1)}>
+              <FaGrip />
+            </button >
+            {/*Botão linha*/}
+            <button className={visual ? "text-base text-stone-950 hover:text-stone-700 cursor-pointer px-2" : "text-base text-stone-400 hover:text-stone-700 cursor-pointer px-2"}
+              onClick={() => setVisual(0)} >
+              <FaGripLines />
+            </button>
+          </div>
+        </div>
       </div>
+
       {/* Fim Formulário */}
 
       {/* Carregando */}
       {loading ? <Loading /> : ''}
       {/* Carregando */}
 
-      {/* Lista de Deputado */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-8 px-6">
+      {/* Lista de Deputado - em card  */}
+      <div className="container w-250 mx-auto px-10">
+        <div className="mt-6 border-t border-gray-100">
+          <dl className="divide-y divide-gray-100">
+            {dados.map((p, index) => (
+              !visual ? <PoliticoList key={index} {...p} /> : ""
+            ))}
+          </dl>
+        </div>
+      </div>
+      
+      {/* Lista de Deputado - em card */}
+      <div className={visual ? "grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 gap-3 px-6" : ""}>
         {dados.map((p, index) => (
-          <PoliticoCard key={index} {...p} />
+          visual ? <PoliticoCard key={index} {...p} /> : ""
         ))}
       </div>
 
