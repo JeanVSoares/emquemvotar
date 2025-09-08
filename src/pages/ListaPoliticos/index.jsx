@@ -198,7 +198,8 @@ export default function ListaPoliticos() {
 
     console.log(visual);
     async function buscar() {
-
+    
+      setLoading(true);
       setDados([]);
       try {
         const resultado = await getDeputados(pagina, quantidade, ordem, ordenarPor, siglaUF); // página, quantidade
@@ -340,7 +341,7 @@ export default function ListaPoliticos() {
       {/* Carregando */}
 
       {/* Lista de Deputado - em card  */}
-      <div className="container w-250 mx-auto px-10">
+      <div className="container w-auto mx-auto px-10 bg-white">
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             {dados.map((p, index) => (
