@@ -6,6 +6,7 @@ import Loading from "../../component/Loading";
 import { getDeputados } from "../../services/apiListaDeputado";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { FaGripLines, FaGrip } from 'react-icons/fa6';
+import { getAllPartidos } from "../../services/apiListaReferencias";
 
 const itensOrdemPor = [
   { name: "Nome", query: "nome" },
@@ -187,32 +188,59 @@ export default function ListaPoliticos() {
   const [siglaUF, setSiglaUF] = useState('');
   const [loading, setLoading] = useState(true);
   const [pagina, setPagina] = useState(1);
+  const [siglaPartido, setSiglaPartido] = useState('');
   const [quantidade, setQuantidade] = useState(16);
   const [ordem, setOrdem] = useState('ASC');
   const [ordenarPor, setOrdenarPor] = useState('nome');
-  const [visual, setVisual] = useState(0)
+  const [visual, setVisual] = useState(1)
+  const [allPartidos, setAllPartidos] = useState([])
 
 
 
   useEffect(() => {
-
-    console.log(visual);
+    setLoading(true);
     async function buscar() {
-    
+      /**************/
+      //Pesquisa para Lista de Deputado
+      //Há paramentros que serão filtrado no arquivo 'apilistaDepultado' como siglaUF e siflaPartido
+      /**************/
+      try {
+        const resultado = await getDeputados(pagina, quantidade, ordem, ordenarPor, siglaUF, siglaPartido); // página, quantidade
+        setDados(resultado.dados);
+      } catch (erro) {
+        console.error('Erro ao encontrar lista de Deputado' + erro.message);
+      }
+    }
+    /**************/
+    //Pesquisa para Partido
+    /**************/
+    async function buscarPartido() {
       setLoading(true);
       setDados([]);
       try {
-        const resultado = await getDeputados(pagina, quantidade, ordem, ordenarPor, siglaUF); // página, quantidade
-        setDados(resultado.dados);
+        const resultado = await getAllPartidos(); //Todos os partidos Listados
+        setAllPartidos(resultado.dados);
       } catch (erro) {
-        console.error(erro.message);
+        console.error('Erro ao selecionar todos os partidos' + erro.message);
       } finally {
         setLoading(false);
       }
     }
+    /**************/
+    //Chamada para funcões Query
+    /**************/
     buscar();
-  }, [pagina, quantidade, ordem, ordenarPor, siglaUF, visual])
+    buscarPartido();
 
+  }, [pagina, quantidade, ordem, ordenarPor, siglaUF, visual, siglaPartido])
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!dados) {
+    return <p className="text-center text-red-500">Lista não encontrado.</p>;
+  }
   return (
 
     <div className="py-6">
@@ -256,7 +284,7 @@ export default function ListaPoliticos() {
               autoComplete="siglaUF-name"
               className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
             >
-              <option value=''>-</option>
+              <option value=''>todos</option>
               {itensUF.map((p, item) => (
                 <option value={p.sigla}>{p.sigla}</option>
               ))}
@@ -292,10 +320,35 @@ export default function ListaPoliticos() {
           </div>
 
         </div>
-        {/* Asc Desc */}
+        {/* Partido */}
         <div className="sm:col-span-1">
           <label htmlFor="city" className="block text-sm/6 font-medium text-gray-900">
-            Sentido
+            Partido
+          </label>
+          <div className="mt-2 grid grid-cols-1">
+            <select
+              onChange={(e) => setSiglaPartido(e.target.value)}
+              id="partido"
+              name="partido"
+              autoComplete="partido-name"
+              className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            >
+              <option value="">Todos</option>
+              {allPartidos.map((p, item) => (
+                <option value={p.sigla}>{p.sigla}</option>
+              ))}
+            </select>
+            <ChevronDownIcon
+              aria-hidden="true"
+              className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+            />
+          </div>
+
+        </div>
+        {/* Asc Desc*/}
+        <div className="sm:col-span-1">
+          <label htmlFor="city" className="block text-sm/6 font-medium text-gray-900">
+            Ordem
           </label>
           <div className="mt-2 grid grid-cols-1">
             <select
@@ -316,8 +369,9 @@ export default function ListaPoliticos() {
           </div>
 
         </div>
+
         {/*Lista ou Card*/}
-        <div className="sm:col-span-2">
+        <div className="sm:col-span-1">
           <div className="flex flex-row justify-center mt-10">
             {/*Botão Card*/}
             <button
@@ -341,7 +395,7 @@ export default function ListaPoliticos() {
       {/* Carregando */}
 
       {/* Lista de Deputado - em card  */}
-      <div className="container w-auto mx-auto px-10 bg-white">
+      <div className="container w-250 mx-auto px-10">
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             {dados.map((p, index) => (
@@ -350,7 +404,7 @@ export default function ListaPoliticos() {
           </dl>
         </div>
       </div>
-      
+
       {/* Lista de Deputado - em card */}
       <div className={visual ? "grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 gap-3 px-6" : ""}>
         {dados.map((p, index) => (

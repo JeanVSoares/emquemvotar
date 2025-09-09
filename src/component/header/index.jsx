@@ -54,6 +54,7 @@ export default function Header() {
         </div>
         <div className="flex lg:hidden">
           <button
+
             type="button"
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
@@ -65,7 +66,7 @@ export default function Header() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           {navitens.map((p, itens) => (
             <>
-              <Link to={p.href} className="text-sm/6 font-semibold text-gray-900">{p.name}</Link>
+              <Link key="p.name" to={p.href} className="text-sm/6 font-semibold text-gray-900">{p.name}</Link>
             </>
           ))}
         </PopoverGroup>

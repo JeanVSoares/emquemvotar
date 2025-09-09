@@ -1,5 +1,6 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom'
+import { FaEye } from 'react-icons/fa6';
 
 export default function PoliticoList({
   email,
@@ -29,10 +30,10 @@ export default function PoliticoList({
           <p className='mt-3 text-sm text-gray-500'>{siglaPartido} - {siglaUf}</p>
         </dd>
         <dd className="flex justify-end mt-1 text-sm/6 sm:col-span-2 text-gray-700 sm:mt-0">
-          <Link to={`/deputado/${id}`} className="text-center rounded-full bg-yellow-600 w-20 mt-3 py-1 font-sans 
-                             text-sm font-medium font-stretch-normal text-gray-900 hover:text-gray-100 
+          <Link to={`/deputado/${id}`} className="flex justify-center rounded-full bg-yellow-600 w-20 mt-4 py-1 font-sans 
+                             text-basec font-medium font-stretch-normal text-gray-500 hover:text-gray-100 
                              shadow-xs hover:bg-yellow-500 focus-visible:outline-2
-                             focus-visible:outline-offset-2 focus-visible:outline-white">Veja
+                             focus-visible:outline-offset-2 focus-visible:outline-white"><FaEye />
           </Link>
         </dd>
       </div>

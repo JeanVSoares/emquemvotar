@@ -6,16 +6,21 @@ const BASE_URL = "https://dadosabertos.camara.leg.br/api/v2";
  * @param {number} itens - Quantidade de itens por página
  * @returns {Promise<Object>} - Retorna os dados da API
  */
-export async function getDeputados(pagina = 1, itens = 20, ordem = "ASC", ordenarPor = "nome", siglaUf = '') {
-  console.log(`/deputados?pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`)
-  console.log(`siglaUf=MG&`)
-  const url = `${BASE_URL}/deputados?${siglaUf === '' ? '' : 'siglaUf=' + siglaUf + '&'}pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`;
+export async function getDeputados(pagina = 1, itens = 20, ordem = "ASC", ordenarPor = "nome", siglaUf = '', siglaPartido = '') {
+  console.log(`${BASE_URL}/deputados?
+    ${siglaUf === '' ? '' : 'siglaUf=' + siglaUf + '&'}
+    ${siglaPartido === '' ? '' : 'siglaPartido=' + siglaPartido + '&'}
+    pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`)
+  //console.log(`siglaUf=MG&`)
+  const url = `${BASE_URL}/deputados?${siglaUf === '' ? '' : 'siglaUf=' + siglaUf + '&'}${siglaPartido === '' ? '' : 'siglaPartido=' + siglaPartido + '&'}pagina=${pagina}&itens=${itens}&ordem=${ordem}&ordenarPor=${ordenarPor}`;
 
   const resposta = await fetch(url);
   if (!resposta.ok) {
     throw new Error("Erro ao buscar deputados");
   }
-  return await resposta.json();
+  const data = await resposta.json();
+  //console.log(data);
+  return data;
 }
 
 /**
@@ -25,13 +30,17 @@ export async function getDeputados(pagina = 1, itens = 20, ordem = "ASC", ordena
  */
 
 export async function getDeputadoDetalhes(id) {
+  //console.log(`${BASE_URL}/deputados/${id}`);
   const url = `${BASE_URL}/deputados/${id}`;
-
   const resposta = await fetch(url);
+
   if (!resposta.ok) {
     throw new Error("Erro ao buscar detalhes do deputado");
   }
-  return await resposta.json();
+
+  const data = await resposta.json();
+  //  console.log(data);
+  return data;
 }
 
 /**
@@ -47,3 +56,4 @@ export async function getDeputadoAll() {
   }
   return await resposta.json();
 }
+
